@@ -30,7 +30,7 @@ def parse(start_url):
                 price = listing_sizes_soup.find('span', id='priceblock_ourprice').text.encode('utf-8')
                 print price.encode('utf-8'), size, color
                 todays_date = str(datetime.now())
-                scraperwiki.sqlite.save(unique_keys=['Date'], data = {"Size": size.strip(), "Color": color.strip(), "Price": color.strip(), "Date": todays_date})
+                scraperwiki.sqlite.save(unique_keys=['Date'], data = {"Size": size.strip(), "Color": color.strip(), "Price": price.strip(), "Date": todays_date})
             if 'swatchUnavailable' in colors_li['class']:
                 continue
             else:
@@ -41,7 +41,7 @@ def parse(start_url):
                     price = listing_color_soup.find('span', id='priceblock_ourprice').text.encode('utf-8')
                     print price.encode('utf-8'), size, color
                     todays_date = str(datetime.now())
-                    scraperwiki.sqlite.save(unique_keys=['Date'], data = {"Size": size.strip(), "Color": color.strip(), "Price": color.strip(), "Date": todays_date})
+                    scraperwiki.sqlite.save(unique_keys=['Date'], data = {"Size": size.strip(), "Color": color.strip(), "Price": price.strip(), "Date": todays_date})
                 else:
                     continue
 
