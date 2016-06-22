@@ -26,8 +26,8 @@ def parse(start_url):
             colors_ids = colors_li['id']
             if 'color_name_0' in colors_ids:
                 color = 'Unfinished'
-                price = listing_sizes_soup.find('span', id='priceblock_ourprice').text
-                print price, size, color
+                price = listing_sizes_soup.find('span', id='priceblock_ourprice').text.encode('utf-8')
+                print price.encode('utf-8'), size, color
                 todays_date = str(datetime.now())
                 scraperwiki.sqlite.save(unique_keys=['Date'], data = {"Size": size.strip(), "Color": color.strip(), "Price": color.strip(), "Date": todays_date})
             if 'swatchUnavailable' in colors_li['class']:
@@ -37,8 +37,8 @@ def parse(start_url):
                 if colors_url:
                     listing_color_soup = bs(connect('https://www.amazon.co.uk/Hairpin-Table-Legs-COMPLETE-Colours'+colors_url).text, 'lxml')
                     color = colors_li.find('img', 'imgSwatch')['alt']
-                    price = listing_color_soup.find('span', id='priceblock_ourprice').text
-                    print price, size, color
+                    price = listing_color_soup.find('span', id='priceblock_ourprice').text.encode('utf-8')
+                    print price.encode('utf-8'), size, color
                     todays_date = str(datetime.now())
                     scraperwiki.sqlite.save(unique_keys=['Date'], data = {"Size": size.strip(), "Color": color.strip(), "Price": color.strip(), "Date": todays_date})
                 else:
@@ -47,4 +47,3 @@ def parse(start_url):
 
 if __name__ == '__main__':
     parse('https://www.amazon.co.uk/Hairpin-Table-Legs-COMPLETE-Colours/dp/B00W1SELMM/ref=sr_1_1?ie=UTF8&qid=1466581141&sr=8-1&keywords=hairpin+legs')
- 
