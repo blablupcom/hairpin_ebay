@@ -27,7 +27,7 @@ def parse(start_url):
             colors_ids = colors_li['id']
             if 'color_name_0' in colors_ids:
                 color = 'Unfinished'
-                price = listing_sizes_soup.find('span', id='priceblock_ourprice').text.encode('utf-8')
+                price = listing_sizes_soup.find('span', id='priceblock_ourprice').text
                 print price.encode('utf-8'), size, color
                 todays_date = str(datetime.now())
                 scraperwiki.sqlite.save(unique_keys=['Date'], data = {"Size": size.strip(), "Color": color.strip(), "Price": price.strip(), "Date": todays_date})
@@ -38,7 +38,7 @@ def parse(start_url):
                 if colors_url:
                     listing_color_soup = bs(connect('https://www.amazon.co.uk/Hairpin-Table-Legs-COMPLETE-Colours'+colors_url).text, 'lxml')
                     color = colors_li.find('img', 'imgSwatch')['alt']
-                    price = listing_color_soup.find('span', id='priceblock_ourprice').text.encode('utf-8')
+                    price = listing_color_soup.find('span', id='priceblock_ourprice').text
                     print price.encode('utf-8'), size, color
                     todays_date = str(datetime.now())
                     scraperwiki.sqlite.save(unique_keys=['Date'], data = {"Size": size.strip(), "Color": color.strip(), "Price": price.strip(), "Date": todays_date})
