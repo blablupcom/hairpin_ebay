@@ -42,7 +42,7 @@ def parse(start_url):
                     title = listing_color_soup.title.text
                     while 'Bot Check' in title:
                         listing_color_soup = bs(connect('https://www.amazon.de/Hairpin-Table-Legs-COMPLETE-Colours'+colors_url).text, 'lxml')
-                        title = listing_soup.title.text
+                        title = listing_color_soup.title.text
 
                     color = colors_li.find('img', 'imgSwatch')['alt']
                     
