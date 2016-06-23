@@ -43,7 +43,10 @@ def parse(start_url):
                         listing_color_soup = bs(connect('https://www.amazon.de/Hairpin-Table-Legs-COMPLETE-Colours'+colors_url).text, 'lxml')
                         title = listing_color_soup.title.text
                     color = colors_li.find('img', 'imgSwatch')['alt']
-                    price = listing_color_soup.find('span', id='priceblock_ourprice').text
+                    try:
+                        price = listing_color_soup.find('span', id='priceblock_ourprice').text
+                    except:
+                        price = listing_color_soup.find('span', 'a-color-price').text
                     print price.encode('utf-8'), size, color
                     todays_date = str(datetime.now())
                     scraperwiki.sqlite.save(unique_keys=['Date'], data = {"Size": size.strip(), "Color": color.strip(), "Price": price.strip(), "Date": todays_date})
