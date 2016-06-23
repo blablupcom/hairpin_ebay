@@ -9,10 +9,9 @@ import time
 
 ua = {'User-agent': 'Mozilla/5.0'}
 base_url = 'https://www.amazon.de/Hairpin-Table-Legs-COMPLETE-Colours/dp/'
-proxy = {'https': 'https://185.72.246.41:3128'}
+
 
 def connect(start_url):
-    # page = requests.get(start_url, headers=ua, proxies=proxy)
     page = requests.get(start_url, headers=ua)
     return page
 
@@ -43,10 +42,7 @@ def parse(start_url):
                     while 'Bot Check' in title:
                         listing_color_soup = bs(connect('https://www.amazon.de/Hairpin-Table-Legs-COMPLETE-Colours'+colors_url).text, 'lxml')
                         title = listing_color_soup.title.text
-
                     color = colors_li.find('img', 'imgSwatch')['alt']
-                 
-                    print title
                     price = listing_color_soup.find('span', id='priceblock_ourprice').text
                     print price.encode('utf-8'), size, color
                     todays_date = str(datetime.now())
