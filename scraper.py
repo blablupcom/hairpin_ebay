@@ -1,63 +1,30 @@
 import sys
 reload(sys)
 sys.setdefaultencoding('UTF8')
-import requests
-from bs4 import BeautifulSoup as bs
+from splinter import Browser
 import scraperwiki
 from datetime import datetime
-import time
 
-ua = {'User-agent': 'Mozilla/5.0'}
-base_url = 'https://www.amazon.de/Hairpin-Table-Legs-COMPLETE-Colours/dp/'
-
-
-def connect(start_url):
-    page = requests.get(start_url, headers=ua)
-    return page
-
-def parse(start_url):
-    listing_soup = bs(connect(start_url).text, 'lxml')
-    title = listing_soup.title.text
-    while 'Bot Check' in title:
-        listing_soup = bs(connect(start_url).text, 'lxml')
-        title = listing_soup.title.text
-    sizes_lis = listing_soup.find('div', id="variation_size_name").find('ul').find_all('li')
-    for sizes_li in sizes_lis:
-        sizes_url = base_url+sizes_li['data-defaultasin']
-        listing_sizes_soup = bs(connect(sizes_url).text, 'lxml')
-        title = listing_sizes_soup.title.text
-        while 'Bot Check' in title:
-            listing_sizes_soup = bs(connect(sizes_url).text, 'lxml')
-            title = listing_sizes_soup.title.text
-        colors_lis = listing_sizes_soup.find('div', id="variation_color_name").find('ul').find_all('li')
-        size = sizes_li.find('span', 'a-size-base').text
-        for colors_li in colors_lis:
-            if 'swatchUnavailable' in colors_li['class']:
-                continue
-            else:
-                colors_url = colors_li['data-dp-url']
-                if colors_url:
-                    listing_color_soup = bs(connect('https://www.amazon.de/Hairpin-Table-Legs-COMPLETE-Colours'+colors_url).text, 'lxml')
-                    title = listing_color_soup.title.text
-                    while 'Bot Check' in title:
-                        listing_color_soup = bs(connect('https://www.amazon.de/Hairpin-Table-Legs-COMPLETE-Colours'+colors_url).text, 'lxml')
-                        title = listing_color_soup.title.text
-                    color = colors_li.find('img', 'imgSwatch')['alt']
-                    try:
-                        price = listing_color_soup.find('span', id='priceblock_ourprice').text
-                    except:
-                        price = listing_color_soup.find('span', 'a-color-price').text
-                    print price.encode('utf-8'), size, color
-                    todays_date = str(datetime.now())
-                    scraperwiki.sqlite.save(unique_keys=['Date'], data = {"Size": size.strip(), "Color": color.strip(), "Price": price.strip(), "Date": todays_date})
-                else:
-                    color = colors_li.find('img', 'imgSwatch')['alt']
-                    price = listing_sizes_soup.find('span', id='priceblock_ourprice').text
-                    print price.encode('utf-8'), size, color
-                    todays_date = str(datetime.now())
-                    scraperwiki.sqlite.save(unique_keys=['Date'], data = {"Size": size.strip(), "Color": color.strip(), "Price": price.strip(), "Date": todays_date})
-
-
-
-if __name__ == '__main__':
-    parse('https://www.amazon.de/Hairpin-Table-Legs-COMPLETE-Colours/dp/B00W1SELMM/ref=sr_1_1?ie=UTF8&qid=1466581141&sr=8-1&keywords=hairpin+legs')
+with Browser('phantomjs') as browser:
+    ids = ['580587871570', '580587871572', '580587871576',  '580587871574', '580587871578', '580587871581', '580587871583',
+           '580587871586', '580690543975', '580690543976', '580690543977', '580690543978', '580587871589', '580587871592',
+           '580690543979', '580690543980', '580587871594', '580587871595', '580587871596', '580587871604', '580690543984',
+           '580690543981', '580690543982', '580587871597', '580587871598', '580587871599', '580587871600', '580587871601',
+           '580587871602', '580587871603', '580690543983', '580587871605', '580587871604', '580587871606', '580587871607',
+           '580587871608', '580587871609', '580587871610', '580587871611', '580690543986', '580690543985', '580587871630',
+           '580690543999', '580690544008', '580587871631', '580587871632', '580690544012', '580587871638', '580690544013',
+           '580690543974', '580587871639', '580690544018', '580587871640', '580690544030', '580946326769', '580587871642',
+           '580997996508', '580997996509', '580587871643', '580587871644', '580997996511', '580587871646', '580690544037',
+           '580587871647', '580690544038', '580587871648', '580690544039', '580587871649', '580587871650', '580587871651',
+           '580587871652', '580587871653']
+    for id_number in ids:
+        url = 'http://www.ebay.co.uk/itm/4x-Hairpin-Table-Legs-All-Sizes-Colours-UKs-Fastest-Selling-3yrs-Running-/281574593097?var={}&hash=item418f275249'.format(id_number)
+        browser.visit(url)
+        price = browser.find_by_id('prcIsum').text
+        length = browser.find_by_xpath('//select[@id="msku-sel-1"]//option[@selected="selected"]').first.text
+        design = browser.find_by_xpath('//select[@id="msku-sel-2"]//option[@selected="selected"]').first.text
+        finish = browser.find_by_xpath('//select[@id="msku-sel-3"]//option[@selected="selected"]').first.text
+        material_type = browser.find_by_xpath('//select[@id="msku-sel-4"]//option[@selected="selected"]').first.text
+        print price, length, design, finish, material_type
+        todays_date = str(datetime.now())
+        scraperwiki.sqlite.save(unique_keys=['date'], data={"length": length.strip(), "design": design, "finish": finish, "material_type": material_type, "price": price, "date": 
