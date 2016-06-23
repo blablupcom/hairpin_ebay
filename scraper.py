@@ -17,6 +17,7 @@ def connect(start_url):
 
 def parse(start_url):
     listing_soup = bs(connect(start_url).text, 'lxml')
+    print listing_soup
     sizes_lis = listing_soup.find('div', id="variation_size_name").find('ul').find_all('li')
     for sizes_li in sizes_lis:
         sizes_url = base_url+sizes_li['data-defaultasin']
