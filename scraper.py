@@ -27,9 +27,8 @@ def parse(start_url):
         sizes_url = base_url+sizes_li['data-defaultasin']
         listing_sizes_soup = bs(connect(sizes_url).text, 'lxml')
         title = listing_sizes_soup.title.text
-        print title
         while 'Bot Check' in title:
-            listing_soup = bs(connect(sizes_url).text, 'lxml')
+            listing_sizes_soup = bs(connect(sizes_url).text, 'lxml')
             title = listing_sizes_soup.title.text
         colors_lis = listing_sizes_soup.find('div', id="variation_color_name").find('ul').find_all('li')
         size = sizes_li.find('span', 'a-size-base').text
