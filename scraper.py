@@ -27,4 +27,4 @@ with Browser('phantomjs') as browser:
         material_type = browser.find_by_xpath('//select[@id="msku-sel-4"]//option[@selected="selected"]').first.text
         print price, length, design, finish, material_type
         todays_date = str(datetime.now())
-        scraperwiki.sqlite.save(unique_keys=['date'], data={"length": length.strip(), "design": design, "finish": finish, "material_type": material_type, "price": price, "date": 
+        scraperwiki.sqlite.save(unique_keys=['date'], data={"length": length.strip(), "design": design, "finish": finish, "material_type": material_type, "price": price, "date": date})
