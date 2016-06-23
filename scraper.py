@@ -45,7 +45,9 @@ def parse(start_url):
                         title = listing_soup.title.text
 
                     color = colors_li.find('img', 'imgSwatch')['alt']
+                    
                     print listing_color_soup
+                    print title
                     price = listing_color_soup.find('span', id='priceblock_ourprice').text
                     print price.encode('utf-8'), size, color
                     todays_date = str(datetime.now())
